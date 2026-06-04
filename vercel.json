@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "",
+    "NEXT_PUBLIC_ENVIRONMENT": "staging"
+  },
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "https://onrender.com*"
+    }
+  ]
+}

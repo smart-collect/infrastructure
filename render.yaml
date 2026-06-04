@@ -1,0 +1,50 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. Backend Node.js (Web Service)
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: smart-collect-backend
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    plan: free # Coût zéro
+    autoDeploy: true # Déploiement automatique depuis branch main
+    healthCheckPath: /health # Endpoint à adapter selon votre code
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false # À configurer manuellement dans le dashboard Render (Supabase)
+      - key: MQTT_BROKER_URL
+        sync: false # Référence vers le service Mosquitto
+
+  # ---------------------------------------------------------------------------
+  # 2. AI Service Python (Web Service)
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: smart-collect-ai-service
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app # À adapter selon votre framework (FastAPI/Flask)
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: BACKEND_API_URL
+        sync: false
+
+  # ---------------------------------------------------------------------------
+  # 3. Mosquitto MQTT Broker (Private Service)
+  # ---------------------------------------------------------------------------
+  - type: pserv
+    name: smart-collect-mosquitto
+    runtime: docker
+    plan: free
+    autoDeploy: true
+envVars:
+      - key: MQTT_ALLOW_ANONYMOUS
+        value: "false"
