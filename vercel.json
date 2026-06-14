@@ -1,21 +1,15 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "",
-    "NEXT_PUBLIC_ENVIRONMENT": "staging"
-  },
-  "redirects": [
+  "builds": [
     {
-      "source": "/home",
-      "destination": "/",
-      "permanent": true
+      "src": "index.html",
+      "use": "@vercel/static"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/v1/:path*",
-      "destination": "https://onrender.com*"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
